@@ -4,6 +4,12 @@ import Employee from '../../src/models/Employee';
 jest.mock('../../src/repositories/ConnectionFactory');
 
 describe('Employee CRUD tests', () => {
+    let employeeRepository;
+
+    beforeAll(() => {
+        employeeRepository = new EmployeeRepository();
+    });
+
     describe('Create employee', () => {
         test('Should create an employee with success', async () => {
             const expectedEmployee = {
@@ -27,7 +33,7 @@ describe('Employee CRUD tests', () => {
                 department: 'TI'
             };
 
-            const created = await EmployeeRepository.create(employee);
+            const created = await employeeRepository.create(employee);
 
             expect(saveSpy).toHaveBeenCalled();
             expect(created).toMatchObject(expectedCreated);
@@ -45,7 +51,7 @@ describe('Employee CRUD tests', () => {
                 });
 
             try {
-                await EmployeeRepository.create(employee);
+                await employeeRepository.create(employee);
                 throw new Error('Unexpected result');
             } catch (err) {
                 expect(saveSpy).toHaveBeenCalled();
@@ -84,7 +90,7 @@ describe('Employee CRUD tests', () => {
                     }
                 ]);
 
-            const employees = await EmployeeRepository.list();
+            const employees = await employeeRepository.list();
 
             expect(findSpy).toHaveBeenCalledWith({});
             expect(employees).toHaveLength(3);
@@ -107,7 +113,7 @@ describe('Employee CRUD tests', () => {
             delete expectedFind._id;
 
             const email = 'johndoe@test.com';
-            const employee = await EmployeeRepository.findByEmail(email);
+            const employee = await employeeRepository.findByEmail(email);
 
             expect(findOneSpy).toHaveBeenCalledWith({ email });
             expect(employee).toMatchObject(expectedFind);
@@ -122,7 +128,7 @@ describe('Employee CRUD tests', () => {
                 });
 
             try {
-                await EmployeeRepository.findByEmail(email);
+                await employeeRepository.findByEmail(email);
                 throw new Error('Unexpected result');
             } catch (err) {
                 expect(findOneSpy).toHaveBeenCalledWith({ email });
@@ -156,7 +162,7 @@ describe('Employee CRUD tests', () => {
                 name: 'John Doe Harrison'
             };
 
-            const updated = await EmployeeRepository.updateByEmail(email, update);
+            const updated = await employeeRepository.updateByEmail(email, update);
 
             expect(findOneAndUpdateSpy).toHaveBeenCalledWith({ email }, update);
             expect(findOneSpy).toHaveBeenCalledWith({ email });
@@ -177,7 +183,7 @@ describe('Employee CRUD tests', () => {
             const findOneSpy = jest.spyOn(Employee, 'findOne');
 
             try {
-                await EmployeeRepository.updateByEmail(email, update);
+                await employeeRepository.updateByEmail(email, update);
                 throw new Error('Unexpected result');
             } catch (err) {
                 expect(findOneAndUpdateSpy).toHaveBeenCalledWith({ email }, update);
@@ -194,7 +200,7 @@ describe('Employee CRUD tests', () => {
             const deleteOne = jest.spyOn(Employee, 'deleteOne')
                 .mockResolvedValue({ deletedCount: 1 });
 
-            await EmployeeRepository.deleteByEmail(email);
+            await employeeRepository.deleteByEmail(email);
 
             expect(deleteOne).toHaveBeenCalledWith({ email });
         });
@@ -206,7 +212,7 @@ describe('Employee CRUD tests', () => {
                 .mockResolvedValue({ deletedCount: 0 });
 
             try {
-                await EmployeeRepository.deleteByEmail(email);
+                await employeeRepository.deleteByEmail(email);
                 throw new Error('Unexpected result');
             } catch (err) {
                 expect(err.message).toEqual(expect.stringContaining(`Employee with email: "${email}" not found`));

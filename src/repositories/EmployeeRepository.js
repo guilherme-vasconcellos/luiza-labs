@@ -5,11 +5,7 @@ import Employee from '../models/Employee';
  * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
  */
 export default class EmployeeRepository {
-    /**
-     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
-     * @description Method to initialize database connection
-     */
-    static initialize() {
+    constructor() {
         ConnectionFactory.connect();
     }
 
@@ -19,7 +15,7 @@ export default class EmployeeRepository {
      *
      * @param employee Object containing employee data to create
      */
-    static async create(employee) {
+    async create(employee) {
         const created = await new Employee(employee).save();
         return {
             id: created._id,
@@ -37,7 +33,7 @@ export default class EmployeeRepository {
      *
      * @param where Object containing employee field and value to filter on database
      */
-    static async list(where = {}) {
+    async list(where = {}) {
         const employees = await Employee.find(where);
 
         return employees
@@ -57,7 +53,7 @@ export default class EmployeeRepository {
      *
      * @param email Employee email to find on database
      */
-    static async findByEmail(email) {
+    async findByEmail(email) {
         const employee = await Employee.findOne({ email });
         if (!employee) {
             throw new Error(`Employee with email: "${email}" not found`);
@@ -80,13 +76,13 @@ export default class EmployeeRepository {
      * @param email Employee email to update on database
      * @param newEmployee Partial employee data to update on database
      */
-    static async updateByEmail(email, newEmployee) {
+    async updateByEmail(email, newEmployee) {
         const employee = await Employee.findOneAndUpdate({ email }, newEmployee);
         if (!employee) {
             throw new Error(`Employee with email: "${email}" not found`);
         }
 
-        const updatedEmployee = await EmployeeRepository.findByEmail(email);
+        const updatedEmployee = await this.findByEmail(email);
         return updatedEmployee;
     }
 
@@ -96,7 +92,7 @@ export default class EmployeeRepository {
      *
      * @param email Employee email to delete on database
      */
-    static async deleteByEmail(email) {
+    async deleteByEmail(email) {
         const employee = await Employee.deleteOne({ email });
         if (!employee.deletedCount) {
             throw new Error(`Employee with email: "${email}" not found`);

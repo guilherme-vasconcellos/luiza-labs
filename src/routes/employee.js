@@ -4,11 +4,11 @@ import EmployeeRepository from '../repositories/EmployeeRepository';
 
 const router = new Router();
 
-EmployeeRepository.initialize();
+const employeeRepository = new EmployeeRepository();
 
 router.post('/', async (req, res) => {
     try {
-        const employee = await EmployeeRepository.create(req.body);
+        const employee = await employeeRepository.create(req.body);
 
         return res.status(201).json(employee);
     } catch (err) {
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (_, res) => {
     try {
-        const employees = await EmployeeRepository.list();
+        const employees = await employeeRepository.list();
 
         return res.status(200).json(employees);
     } catch (err) {
@@ -29,7 +29,7 @@ router.get('/', async (_, res) => {
 router.get('/:email', async (req, res) => {
     try {
         const email = req.params.email;
-        const employee = await EmployeeRepository.findByEmail(email);
+        const employee = await employeeRepository.findByEmail(email);
 
         return res.status(200).json(employee);
     } catch (err) {
@@ -40,7 +40,7 @@ router.get('/:email', async (req, res) => {
 router.put('/:email', async (req, res) => {
     try {
         const email = req.params.email;
-        const employee = await EmployeeRepository.updateByEmail(email, req.body);
+        const employee = await employeeRepository.updateByEmail(email, req.body);
 
         return res.status(200).json(employee);
     } catch (err) {
@@ -51,7 +51,7 @@ router.put('/:email', async (req, res) => {
 router.delete('/:email', async (req, res) => {
     try {
         const email = req.params.email;
-        await EmployeeRepository.deleteByEmail(email);
+        await employeeRepository.deleteByEmail(email);
 
         return res.sendStatus(204);
     } catch (err) {
