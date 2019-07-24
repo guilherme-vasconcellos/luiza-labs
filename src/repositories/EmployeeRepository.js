@@ -5,10 +5,20 @@ import Employee from '../models/Employee';
  * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
  */
 export default class EmployeeRepository {
+    /**
+     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
+     * @description Method to initialize database connection
+     */
     static initialize() {
         ConnectionFactory.connect();
     }
 
+    /**
+     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
+     * @description Method to create an employee from javascript object
+     *
+     * @param employee Object containing employee data to create
+     */
     static async create(employee) {
         const created = await new Employee(employee).save();
         return {
@@ -21,6 +31,12 @@ export default class EmployeeRepository {
         };
     }
 
+    /**
+     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
+     * @description Method to list employees by filter
+     *
+     * @param where Object containing employee field and value to filter on database
+     */
     static async list(where = {}) {
         const employees = await Employee.find(where);
 
@@ -35,6 +51,12 @@ export default class EmployeeRepository {
             }));
     }
 
+    /**
+     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
+     * @description Method to get an employee by email
+     *
+     * @param email Employee email to find on database
+     */
     static async findByEmail(email) {
         const employee = await Employee.findOne({ email });
         if (!employee) {
@@ -51,6 +73,13 @@ export default class EmployeeRepository {
         };
     }
 
+    /**
+     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
+     * @description Method to update an employee by email
+     *
+     * @param email Employee email to update on database
+     * @param newEmployee Partial employee data to update on database
+     */
     static async updateByEmail(email, newEmployee) {
         const employee = await Employee.findOneAndUpdate({ email }, newEmployee);
         if (!employee) {
@@ -61,6 +90,12 @@ export default class EmployeeRepository {
         return updatedEmployee;
     }
 
+    /**
+     * @author Guilherme Vasconcellos <guiyllw@hotmail.com>
+     * @description Method to delete an employee by email
+     *
+     * @param email Employee email to delete on database
+     */
     static async deleteByEmail(email) {
         const employee = await Employee.deleteOne({ email });
         if (!employee.deletedCount) {
