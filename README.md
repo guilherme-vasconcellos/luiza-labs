@@ -11,7 +11,7 @@ Dependencies used on development:
 - Docker v18.09.2
 - MongoDB v4.0
 
-The application is written in node with express framework and mongo db as database.
+The application is written in node with express framework and mongodb as database.
 
 Yarn is used to manage dependencies and tasks.
 
@@ -34,8 +34,10 @@ yarn test
 yarn test:unit
 ```
 
-## Run integration tests (Needs an instance of mongo db running)
+## Run integration tests (Needs an instance of mongodb running)
 ```sh
+# You can start mongodb instance by 
+# docker run --name mongo -p 27017:27017 mongo
 yarn test:integration
 ```
 
