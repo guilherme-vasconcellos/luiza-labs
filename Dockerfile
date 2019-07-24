@@ -13,6 +13,8 @@ RUN npm i -g yarn
 
 # Copy and install only production dependencies
 COPY dist .
+COPY package.json .
+COPY yarn.lock .
 
 RUN yarn install --production
 

@@ -2,7 +2,7 @@
   "name": "node-express",
   "version": "1.0.0",
   "scripts": {
-    "prebuild": "rimraf dist && babel src --out-dir dist && cp package.json dist && cp yarn.lock dist",
+    "prebuild": "rimraf dist && babel src --out-dir dist",
     "build": "docker-compose build",
     "postbuild": "rimraf dist",
     "dev": "nodemon --exec babel-node src/app.js -r node_modules/dotenv/config",
